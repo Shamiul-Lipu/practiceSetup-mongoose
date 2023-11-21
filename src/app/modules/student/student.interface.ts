@@ -1,4 +1,5 @@
 // import { Schema, model, connect } from 'mongoose';
+import { Model } from 'mongoose';
 
 export type UserName = {
   firstname: string;
@@ -28,3 +29,22 @@ export type Student = {
   working: boolean;
   isActive: 'active' | 'blocked';
 };
+
+// for creating custom static interface
+// had to make it interface beacuse it extends
+
+export interface StudentStaticMethodsModel extends Model<Student> {
+  isUserExists(id: string): Promise<Student | null>;
+}
+
+// for creating custom instance type/interface
+
+// export type StudentMethods = {
+//   isUserExists(id: string): Promise<Student | null>;
+// };
+
+// export type StudentMethodsModel = Model<
+//   Student,
+//   Record<string, never>,
+//   StudentMethods
+// >;
