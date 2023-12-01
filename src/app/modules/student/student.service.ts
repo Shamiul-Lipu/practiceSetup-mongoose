@@ -1,34 +1,40 @@
-import { StudentModel } from '../student.model';
-import { Student } from './student.interface';
+import { Student } from './student.model';
 
-const createStudentCollectionInDB = async (studentData: Student) => {
-  // using custom static method
-  if (await StudentModel.isUserExists(studentData.id)) {
-    throw new Error('User already exists');
-  }
+// ------------- all user will be created from user route------------------
+// const createStudentIntoDB = async (studentData: TStudent) => {
+//   // using custom static method
+//   if (await Student.isUserExists(studentData.id)) {
+//     throw new Error('User already exists!');
+//   }
 
-  const result = await StudentModel.create(studentData); // built in static method
-  // const student = new StudentModel(studentData); // create instance
-  // using custom instance method
-  // if (await student.isUserExists(studentData.id)) {
-  //   throw new Error('User already exists');
-  // }
-  // const result = await student.save(); // built in instance method
+//   const result = await Student.create(studentData); // built in static method
+//   // const student = new StudentModel(studentData); // create instance
+//   // using custom instance method
+//   // if (await student.isUserExists(studentData.id)) {
+//   //   throw new Error('User already exists');
+//   // }
+//   // const result = await student.save(); // built in instance method
 
+//   return result;
+// };
+
+const getAllStudentsFromDB = async () => {
+  const result = await Student.find();
   return result;
 };
 
-const getAllStudentFromDB = async () => {
-  return await StudentModel.find();
-};
-
-const getOneStudentFromDB = async (id: string) => {
-  const result = await StudentModel.findOne({ id });
+const getSingleStudentFromDB = async (id: string) => {
+  const result = await Student.aggregate([{ $match: { id } }]);
   return result;
 };
 
-export const StudentService = {
-  createStudentCollectionInDB,
-  getOneStudentFromDB,
-  getAllStudentFromDB,
+const deleteStudentFromDB = async (id: string) => {
+  const result = await Student.updateOne({ id }, { isDeleted: true });
+  return result;
+};
+
+export const StudentServices = {
+  getAllStudentsFromDB,
+  getSingleStudentFromDB,
+  deleteStudentFromDB,
 };

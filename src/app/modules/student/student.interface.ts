@@ -1,40 +1,53 @@
-// import { Schema, model, connect } from 'mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
-export type UserName = {
-  firstname: string;
-  middlename: string;
-  lastname: string;
+export type TUserName = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
 };
 
-export type GuardiansDetails = {
-  name: UserName;
+export type TGuardian = {
+  fatherName: string;
+  fatherOccupation: string;
+  fatherContactNo: string;
+  motherName: string;
+  motherOccupation: string;
+  motherContactNo: string;
+};
+
+export type TLocalGuardian = {
+  name: string;
+  occupation: string;
   contactNo: string;
-  relation: 'father' | 'mother' | string;
+  address: string;
 };
 
-export type Student = {
+export type TStudent = {
   id: string;
-  name: UserName;
-  age: number;
-  gender: 'male' | 'female';
-  bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+  password: string;
+  user: Types.ObjectId;
+  name: TUserName;
+  gender: 'male' | 'female' | 'other';
+  dateOfBirth?: Date;
   email: string;
   contactNo: string;
-  guardians: {
-    parents: GuardiansDetails;
-    localGuardian: GuardiansDetails;
-  };
+  emergencyContactNo: string;
+  bloogGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
   presentAddress: string;
-  working: boolean;
-  isActive: 'active' | 'blocked';
+  permanentAddress: string;
+  guardian: TGuardian;
+  localGuardian: TLocalGuardian;
+  profileImg?: string;
+  admissionSemester: Types.ObjectId;
+  isDeleted: boolean;
 };
 
 // for creating custom static interface
 // had to make it interface beacuse it extends
 
-export interface StudentStaticMethodsModel extends Model<Student> {
-  isUserExists(id: string): Promise<Student | null>;
+export interface StudentModel extends Model<TStudent> {
+  // eslint-disable-next-line no-unused-vars
+  isUserExists(id: string): Promise<TStudent | null>;
 }
 
 // for creating custom instance type/interface
