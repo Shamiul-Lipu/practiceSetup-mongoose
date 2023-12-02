@@ -7,12 +7,29 @@ const findLastStudentId = async () => {
     { id: 1, _id: 0 },
   ).sort({ createdAt: -1 });
 
-  return lastStudent?.id ? lastStudent.id.substring(6) : undefined;
+  return lastStudent?.id ? lastStudent.id : undefined;
 };
 
 // year semesterCode 4 digit number
 export const generateStudentId = async (payload: TAcademicSemester) => {
-  const currentId = (await findLastStudentId()) || (0).toString();
+  let currentId = (0).toString(); // by deafult currentId will be 0000
+
+  // last students id deconstruncting
+  const lastStudentId = await findLastStudentId();
+  const lastStudentSemesterCode = lastStudentId?.substring(4, 6);
+  const lastStudentYear = lastStudentId?.substring(0, 4);
+
+  // current students ids code and name
+  const currentSemesterCode = payload.code;
+  const currentSemesterYear = payload.year;
+
+  if (
+    lastStudentId &&
+    lastStudentSemesterCode === currentSemesterCode &&
+    lastStudentYear === currentSemesterYear
+  ) {
+    currentId = lastStudentId.substring(6);
+  }
 
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
 
