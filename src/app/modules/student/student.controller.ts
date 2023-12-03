@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import { StudentServices } from './student.service';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from 'http-status';
 
 const getAllStudents = async (
   req: Request,
@@ -40,6 +43,22 @@ const getSingleStudent = async (
   }
 };
 
+const updateSingleStudent = catchAsync(async (req, res) => {
+  const { studentId } = req.params;
+  const { student } = req.body;
+  const result = await StudentServices.updateSingleStudentFromDB(
+    studentId,
+    student,
+  );
+
+  sendResponse(res, {
+    statudCode: httpStatus.OK,
+    success: true,
+    message: 'Student is retrieved succesfully',
+    data: result,
+  });
+});
+
 const deleteStudent = async (
   req: Request,
   res: Response,
@@ -63,5 +82,6 @@ const deleteStudent = async (
 export const StudentControllers = {
   getAllStudents,
   getSingleStudent,
+  updateSingleStudent,
   deleteStudent,
 };
