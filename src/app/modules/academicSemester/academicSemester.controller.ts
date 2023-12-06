@@ -11,7 +11,7 @@ const createAcademicSemester = catchAsync(async (req, res) => {
   );
   // response
   sendResponse(res, {
-    statudCode: httpStatus.OK,
+    statusCode: httpStatus.OK,
     success: true,
     message: 'Academic Semester created!!',
     data: result,
@@ -22,7 +22,7 @@ const getAllAcademicSemester = catchAsync(async (req, res) => {
   const result = await AcademicSemesterServices.getAllAcademicSemester();
 
   sendResponse(res, {
-    statudCode: httpStatus.OK,
+    statusCode: httpStatus.OK,
     success: true,
     message: 'Academic Semester data retrived successfuly!',
     data: result,
